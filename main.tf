@@ -20,9 +20,11 @@ resource "aws_route53_zone" "public_root_zones" {
   delegation_set_id = each.value.deleg_id
 
   tags = merge(
-    map("Name", each.value.name),
-    map("DelegationSetId", each.value.deleg_id),
-    map("DelegationSetName", each.value.deleg_name),
+    tomap({
+      Name              = each.value.name
+      DelegationSetId   = each.value.deleg_id
+      DelegationSetName = each.value.deleg_name
+    }),
     var.tags
   )
 
@@ -42,10 +44,12 @@ resource "aws_route53_zone" "public_delegated_secondary_zones" {
   delegation_set_id = each.value.deleg_id
 
   tags = merge(
-    map("Name", each.value.name),
-    map("Parent", each.value.parent),
-    map("DelegationSetId", each.value.deleg_id),
-    map("DelegationSetName", each.value.deleg_name),
+    tomap({
+      Name              = each.value.name 
+      Parent            = each.value.parent
+      DelegationSetId   = each.value.deleg_id
+      DelegationSetName = each.value.deleg_name
+    }),
     var.tags
   )
 
@@ -89,7 +93,7 @@ resource "aws_route53_zone" "private_root_zones" {
   }
 
   tags = merge(
-    map("Name", each.value.name),
+    tomap({Name = each.value.name}),
     var.tags
   )
 
